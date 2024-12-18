@@ -1,28 +1,28 @@
 import React, { useState } from "react";
 import FormComponent from "./components/FormComponents";
-import CardComponents from "./components/CardComponents";
+import CardComponent from "./components/CardComponents";
 
 function App() {
-  const [titoli, setTitoli] = useState([]);
+  const [articoli, setArticoli] = useState([]);
+
+  const handleRemove = (index) => {
+    const nuoviArticoli = articoli.filter((_, i) => i !== index);
+    setArticoli(nuoviArticoli);
+  };
 
   return (
     <div>
       <header>
-        <h1>Lista Articoli</h1>
+        <h1>Gestione Articoli</h1>
       </header>
       <main>
-        {/* FormComponent gestisce l'aggiunta */}
-        <FormComponent titoli={titoli} setTitoli={setTitoli} />
-
-        {/* Mostra la lista dei titoli */}
+        <FormComponent articoli={articoli} setArticoli={setArticoli} />
         <div className="card-list">
-          {titoli.map((titolo, index) => (
-            <CardComponents
+          {articoli.map((articolo, index) => (
+            <CardComponent
               key={index}
-              index={index}
-              titolo={titolo}
-              titoli={titoli}
-              setTitoli={setTitoli}
+              articolo={articolo}
+              onRemove={() => handleRemove(index)}
             />
           ))}
         </div>

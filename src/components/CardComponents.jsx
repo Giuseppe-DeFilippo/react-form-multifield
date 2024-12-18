@@ -1,17 +1,33 @@
 import React from "react";
 
-function CardComponents({ titolo, index, titoli, setTitoli }) {
-    const handleRemove = () => {
-        //l underscore serve per far capire al codice di non far utilizzare il vlore ma solo l indice
-        const nuoviTitoli = titoli.filter((_, i) => i !== index); // Filtra l'articolo da rimuovere
-        setTitoli(nuoviTitoli);
-    };
+function CardComponent({ articolo, onRemove }) {
+    const { titolo, immagine, contenuto, categoria, tags, stato } = articolo;
 
     return (
         <div className="card mb-2" style={{ width: "18rem" }}>
-            <div className="card-body d-flex justify-content-between align-items-center">
+            {immagine && (
+                <img
+                    src={immagine}
+                    className="card-img-top"
+                    alt={`Immagine di ${titolo}`}
+                />
+            )}
+            <div className="card-body">
                 <h5 className="card-title">{titolo}</h5>
-                <button className="btn btn-danger btn-sm" onClick={handleRemove}>
+                <p className="card-text">{contenuto}</p>
+                <p className="card-text">
+                    <strong>Categoria:</strong> {categoria}
+                </p>
+                <p className="card-text">
+                    <strong>Tags:</strong>{" "}
+                    {Object.keys(tags)
+                        .filter((key) => tags[key])
+                        .join(", ")}
+                </p>
+                <p className="card-text">
+                    <strong>Stato:</strong> {stato ? "Pubblicato" : "Bozza"}
+                </p>
+                <button className="btn btn-danger btn-sm" onClick={onRemove}>
                     Elimina
                 </button>
             </div>
@@ -19,4 +35,4 @@ function CardComponents({ titolo, index, titoli, setTitoli }) {
     );
 }
 
-export default CardComponents;
+export default CardComponent;
