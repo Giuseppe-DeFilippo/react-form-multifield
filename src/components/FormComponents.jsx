@@ -13,7 +13,26 @@ function FormComponent({ articoli, setArticoli }) {
         },
         stato: false,
     });
-
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        if (type === "checkbox") {
+            if (name in formData.tags) {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    tags: {
+                        ...prevData.tags,
+                        [name]: checked,
+                    },
+                }));
+            } else {
+                +
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        [name]: checked,
+                    }));
+            }
+        }
+    };
 
 }
 
