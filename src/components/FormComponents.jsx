@@ -31,6 +31,11 @@ function FormComponent({ articoli, setArticoli }) {
                         [name]: checked,
                     }));
             }
+        } else {
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
         }
     };
 
