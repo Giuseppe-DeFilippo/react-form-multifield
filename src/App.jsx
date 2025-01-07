@@ -1,9 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormComponent from "./components/FormComponents";
 import CardComponent from "./components/CardComponents";
 
 function App() {
   const [articoli, setArticoli] = useState([]);
+
+
+  //richiesta backedn
+
+  useEffect(() => {
+
+    fetch('http://localhost:3000/api/articoli')
+      .then((response) => response.json())
+      .then((data) => {
+        setArticoli(data);
+      });
+  }, []);
+
 
   const handleRemove = (index) => {
     const nuoviArticoli = articoli.filter((_, i) => i !== index);

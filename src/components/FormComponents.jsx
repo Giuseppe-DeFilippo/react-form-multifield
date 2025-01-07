@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 
 function FormComponent({ articoli, setArticoli }) {
@@ -8,37 +6,28 @@ function FormComponent({ articoli, setArticoli }) {
         immagine: "",
         contenuto: "",
         categoria: "",
-        tags: {
-            tecnologia: false,
-            sport: false,
-            musica: false,
-        },
+        tags: [],
         stato: false,
     });
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        if (type === "checkbox") {
-            if (name in formData.tags) {
-                setFormData((prevData) => ({
-                    ...prevData,
-                    tags: {
-                        ...prevData.tags,
-                        [name]: checked,
-                    },
-                }));
-            } else {
-                setFormData((prevData) => ({
-                    ...prevData,
-                    [name]: checked,
-                }));
-            }
-        } else {
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
-        }
+
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+
+    const handleTagChange = (e) => {
+        const { value, checked } = e.target;
+
+        setFormData((prevData) => ({
+            ...prevData,
+            tags: checked
+                ? [...prevData.tags, value]
+                : prevData.tags.filter((tag) => tag !== value),
+        }));
     };
 
     const handleSubmit = (e) => {
@@ -50,11 +39,7 @@ function FormComponent({ articoli, setArticoli }) {
                 immagine: "",
                 contenuto: "",
                 categoria: "",
-                tags: {
-                    tecnologia: false,
-                    sport: false,
-                    musica: false,
-                },
+                tags: [],
                 stato: false,
             });
         }
@@ -62,90 +47,60 @@ function FormComponent({ articoli, setArticoli }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-                <input
-                    type="text"
-                    name="titolo"
-                    value={formData.titolo}
-                    onChange={handleChange}
-                    className="form-control"
-                    placeholder="Inserisci titolo"
-                />
-            </div>
+            <input
+                type="text"
+                name="titolo"
+                value={formData.titolo}
+                onChange={handleChange}
+                placeholder="Titolo"
+                className="form-control mb-3"
+            />
+
+            <input
+                type="text"
+                name="immagine"
+                value={formData.immagine}
+                onChange={handleChange}
+                placeholder="URL immagine"
+                className="form-control mb-3"
+            />
+
+            <textarea
+                name="contenuto"
+                value={formData.contenuto}
+                onChange={handleChange}
+                placeholder="Contenuto"
+                rows="4"
+                className="form-control mb-3"
+            />
+
+            <select
+                name="categoria"
+                value={formData.categoria}
+                onChange={handleChange}
+                className="form-select mb-3"
+            >
+                <option value="">Seleziona categoria</option>
+                <option value="tecnologia">Tecnologia</option>
+                <option value="sport">Sport</option>
+                <option value="musica">Musica</option>
+            </select>
 
             <div className="mb-3">
-                <input
-                    type="text"
-                    name="immagine"
-                    value={formData.immagine}
-                    onChange={handleChange}
-                    className="form-control"
-                    placeholder="URL immagine"
-                />
-            </div>
-
-            <div className="mb-3">
-                <textarea
-                    name="contenuto"
-                    value={formData.contenuto}
-                    onChange={handleChange}
-                    className="form-control"
-                    placeholder="Inserisci contenuto"
-                    rows="4"
-                ></textarea>
-            </div>
-
-            <div className="mb-3">
-                <select
-                    name="categoria"
-                    value={formData.categoria}
-                    onChange={handleChange}
-                    className="form-select"
-                >
-                    <option value="">Seleziona categoria</option>
-                    <option value="tecnologia">Tecnologia</option>
-                    <option value="sport">Sport</option>
-                    <option value="musica">Musica</option>
-                </select>
-            </div>
-
-            <div className="mb-3">
-                <div>
-                    <label>
+                {["tecnologia", "sport", "musica"].map((tag) => (
+                    <label key={tag} className="me-2">
                         <input
                             type="checkbox"
-                            name="tecnologia"
-                            checked={formData.tags.tecnologia}
-                            onChange={handleChange}
+                            value={tag}
+                            checked={formData.tags.includes(tag)}
+                            onChange={handleTagChange}
                         />{" "}
-                        Tecnologia
+                        {tag.charAt(0).toUpperCase() + tag.slice(1)}
                     </label>
-                </div>
-                <div>
-                    <label>
-                        <input
-                            type="checkbox"
-                            name="sport"
-                            checked={formData.tags.sport}
-                            onChange={handleChange}
-                        />{" "}
-                        Sport
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <input
-                            type="checkbox"
-                            name="musica"
-                            checked={formData.tags.musica}
-                            onChange={handleChange}
-                        />{" "}
-                        Musica
-                    </label>
-                </div>
+                ))}
             </div>
 
-            <div className="mb-3 form-check">
+            <div className="form-check mb-3">
                 <input
                     type="checkbox"
                     name="stato"
@@ -156,7 +111,7 @@ function FormComponent({ articoli, setArticoli }) {
                 <label className="form-check-label">Pubblica articolo</label>
             </div>
 
-            <button className="btn btn-primary" type="submit">
+            <button type="submit" className="btn btn-primary">
                 Aggiungi
             </button>
         </form>
